@@ -1,0 +1,33 @@
+[project]
+name = "hermes-deep-think"
+version = "1.0.0"
+description = "A no-op deep_think tool for Hermes Agent: reasoning as a tool call, per the think-tool/tau-bench pattern, with an inspectable reasoning trace."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "macayaven" }]
+keywords = ["hermes-agent", "llm", "reasoning", "chain-of-thought", "agent-tools"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/macayaven/hermes-deep-think"
+Issues = "https://github.com/macayaven/hermes-deep-think/issues"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP"]
