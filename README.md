@@ -9,6 +9,13 @@ instead of (or alongside) a vendor "thinking mode". Every thought is recorded to
 
 Same reasoning capability, no dedicated infrastructure.
 
+> **This is the techne-tools fork.** It keeps the upstream mechanism (τ-Bench think-tool
+> pattern, trace recording, rotation) and swaps the system-prompt guidance for a
+> **creative mode**: the four phases are re-framed as *sketch / audition / reflect /
+> commit* — divergence before convergence, failure as data, commitment with named risk.
+> The tool schema is unchanged, so the trace format and rotation behaviour are identical
+> to upstream. See [Creative mode](#creative-mode) below.
+
 ## Why
 
 In August 2026, [@_can1357](https://x.com/_can1357/status/2087228354399265125) popularized
@@ -47,6 +54,29 @@ than reasoning tokens — this is about capability and transparency, not cost.*
 
 The handler itself is a pure no-op: it validates, records, and acknowledges. It never
 fetches, mutates, or decides anything.
+
+## Creative mode
+
+This fork replaces the upstream system-prompt guidance with a creative-mode framing.
+The tool, schema, trace format, and rotation are unchanged — only the guidance the
+model receives about *when and how* to think is different.
+
+| Phase | Upstream (conservative) | Creative mode |
+|---|---|---|
+| `plan` | approach, alternatives rejected | **sketch** — territory, not route; keep several directions alive |
+| `verify` | re-check assumptions, edge cases | **audition** — try the work on; notice what you didn't expect |
+| `reflect` | root cause, then fix | **keep** — what worked / what didn't / what would you do differently |
+| `decide` | weigh options, pick safest | **commit** — pick the most alive option, name the risk |
+
+The system-prompt section also ships two worked examples (a sound-design sketch and a
+draft-revision reflection) demonstrating the *shape* of a good thought, mirroring the
+role worked examples played in Anthropic's benchmarked "optimized prompt".
+
+**Trade-offs, stated plainly:** this guidance will not improve τ-bench-style
+policy-compliance scores — it is not designed to. It optimises for keeping the work
+open, treating the trace as a rehearsal-room wall rather than a plan document. It is
+a complement to, not a replacement for, the upstream conservative guidance: use the
+upstream for reliability-critical work, this fork for exploratory and creative work.
 
 ## Install
 

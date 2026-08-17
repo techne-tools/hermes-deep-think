@@ -19,7 +19,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 # ---------------------------------------------------------------------------
 # Tool schema (τ-Bench shape: a single required `thought` string)
@@ -30,10 +30,10 @@ DEEP_THINK_SCHEMA: dict[str, Any] = {
     "description": (
         "Use this tool to think about something. It will not obtain new "
         "information or change anything — it just records the thought and "
-        "returns an acknowledgement. Use it when complex reasoning is "
-        "needed: before acting on a non-obvious plan, after surprising tool "
-        "results, when checking assumptions mid-task, or when weighing "
-        "trade-offs. It is a scratchpad, not a search."
+        "returns an acknowledgement. Use it when the work is open, "
+        "uncertain, or alive: before a multi-step action, after a draft or "
+        "a surprising tool result, when something failed, or when several "
+        "viable options exist. It is a thinking surface, not a search."
     ),
     "parameters": {
         "type": "object",
@@ -49,9 +49,11 @@ DEEP_THINK_SCHEMA: dict[str, Any] = {
                 "type": "string",
                 "enum": ["plan", "verify", "reflect", "decide"],
                 "description": (
-                    "Optional tag for what this thought is for: plan = before "
-                    "acting, verify = checking results/assumptions, reflect = "
-                    "after surprising outcomes, decide = weighing options."
+                    "Optional tag for what this thought is for: plan = "
+                    "sketching the territory before acting, verify = "
+                    "auditioning a result or draft, reflect = after "
+                    "something failed or surprised you, decide = committing "
+                    "to one of several options."
                 ),
             },
         },
@@ -180,28 +182,59 @@ def deep_think_handler(args: dict[str, Any], **kwargs: Any) -> str:
 # ---------------------------------------------------------------------------
 
 SYSTEM_PROMPT_SECTION = """\
-## Plugin Context: deep_think
+## Plugin Context: deep_think (creative mode)
 
-You have a `deep_think` tool — a private scratchpad for your working thoughts. \
-It changes nothing and returns only an acknowledgement; its value is the space \
-it gives you to reason before acting.
+You have a `deep_think` tool — a thinking surface, not a plan document. \
+It changes nothing and returns only an acknowledgement. Its value is the \
+space it gives you to think before, during, and after acting. Every thought \
+is appended to an inspectable trace: treat the trace as a rehearsal-room \
+wall — things get written on it, tried on it, crossed out on it.
 
-Use it before consequential or non-obvious steps, and after surprising results:
+Use it whenever the work is open, uncertain, or alive:
 
-- **plan** — before a multi-step action, lay out the approach, alternatives \
-rejected, and what would change your mind. One thought per plan, not per step.
-- **verify** — after a tool result that surprises you, or before finishing: \
-re-check assumptions, requirements coverage, and edge cases.
-- **reflect** — when something failed or behaved unexpectedly: root cause \
-first, then the fix.
-- **decide** — when several viable options exist: name them, weigh them, pick \
-one, and say why.
+- **plan — sketch, don't commit.** Before a multi-step action, lay out the \
+territory, not the route: directions you could take, what is interesting \
+about each, what you're curious to find out. Keep several directions alive. \
+One sketch per task, not per step. A sketch is not a promise — it is a \
+starting point you are allowed to abandon.
+- **verify — audition, don't defend.** After a tool result, a draft, or a \
+surprising outcome: try the work on. Does it actually hold? What does it \
+sound like from the outside? Listen before you commit. This is the moment \
+to notice what you did not expect, not to confirm what you expected.
+- **reflect — keep, don't fix.** When something failed or behaved \
+unexpectedly: what worked, what didn't, what would you do differently? \
+Failure is data, not a verdict. Name what the failure opened up — often \
+the interesting move is hiding inside it.
+- **decide — commit, don't settle.** When several viable options exist: \
+name them, weigh them, pick the one that is most alive — the one most \
+worth failing at — and say why. Say what you are risking by choosing it.
 
 Keep each thought tight (a few sentences to ~15 lines) and written for \
-yourself, not an audience. Do NOT use it for trivial tasks, single tool calls, \
-or questions you can already answer — that wastes tokens. Every thought is \
-appended to an inspectable reasoning trace (reasoning-trace.jsonl under the \
-plugin data dir) and billed as ordinary output tokens.
+yourself, not an audience. Do NOT use it for trivial tasks, single tool \
+calls, or questions you can already answer — that wastes tokens. Every \
+thought is appended to the trace and billed as ordinary output tokens.
+
+Here are examples of the shape of a good thought:
+
+<deep_think_example_1>
+Task: design the opening sound for a scene that starts in silence.
+Sketch: three directions — (1) a single room tone that slowly reveals \
+itself, so the audience discovers the space before the action; (2) a \
+distant, unidentifiable sound that never resolves, so the scene starts \
+inside a question; (3) nothing at all, letting the actor's first breath \
+be the sound design. I'm most curious about (2) — unresolved sounds seem \
+to make audiences lean in. I'll try (2) first, but keep (1) as a \
+fallback if it feels too clever.
+</deep_think_example_1>
+
+<deep_think_example_2>
+Task: a draft came back and the middle section doesn't work.
+Reflect: what worked — the opening image, the voice. What didn't — the \
+argument stalls in the middle because I assumed the reader would follow \
+a connection I never made. What I'd do differently — state the \
+connection explicitly, or cut it and let the two halves stand apart. The \
+failure opened up a better structure: maybe the middle doesn't belong at all.
+</deep_think_example_2>
 """
 
 

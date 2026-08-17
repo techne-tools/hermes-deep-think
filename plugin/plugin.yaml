@@ -1,7 +1,7 @@
 name: deep-think
-version: 1.0.0
-description: "A no-op `deep_think` tool for Hermes Agent: the model externalizes its reasoning as a tool call instead of a vendor thinking mode. Same mechanism as Anthropic's official \"think\" tool (τ-Bench), named after the community convention popularized by @_can1357. Records every thought to an inspectable, size-capped reasoning trace."
-author: "Can Bölük (@_can1357, technique), Anthropic (think tool), Hermes Agent (plugin)"
+version: 1.1.0
+description: "A no-op `deep_think` tool for Hermes Agent: the model externalizes its reasoning as a tool call instead of a vendor thinking mode. Same mechanism as Anthropic's official \"think\" tool (τ-Bench), named after the community convention popularized by @_can1357. Records every thought to an inspectable, size-capped reasoning trace. This fork ships creative-mode guidance: sketch/audition/reflect/commit framing for open, exploratory work."
+author: "Can Bölük (@_can1357, technique), Anthropic (think tool), Hermes Agent (plugin), techne-tools (creative-mode fork)"
 license: MIT
 kind: standalone
 provides_tools:
@@ -13,3 +13,4 @@ tags:
   - cot
   - think-tool
   - agent-quality
+  - creative
