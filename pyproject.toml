@@ -17,6 +17,9 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
 [project.urls]
 Homepage = "https://github.com/macayaven/hermes-deep-think"
 Issues = "https://github.com/macayaven/hermes-deep-think/issues"
