@@ -19,7 +19,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 # ---------------------------------------------------------------------------
 # Tool schema (τ-Bench shape: a single required `thought` string)
@@ -31,9 +31,10 @@ DEEP_THINK_SCHEMA: dict[str, Any] = {
         "Use this tool to think about something. It will not obtain new "
         "information or change anything — it just records the thought and "
         "returns an acknowledgement. Use it when the work is open, "
-        "uncertain, or alive: before a multi-step action, after a draft or "
-        "a surprising tool result, when something failed, or when several "
-        "viable options exist. It is a thinking surface, not a search."
+        "uncertain, or alive: before acting (especially to check whether an "
+        "inherited premise is still true), after a draft or a surprising "
+        "tool result, when something failed, or when several viable options "
+        "exist. It is a thinking surface, not a search."
     ),
     "parameters": {
         "type": "object",
@@ -47,13 +48,14 @@ DEEP_THINK_SCHEMA: dict[str, Any] = {
             },
             "phase": {
                 "type": "string",
-                "enum": ["plan", "verify", "reflect", "decide"],
+                "enum": ["verify", "plan", "reflect", "decide"],
                 "description": (
-                    "Optional tag for what this thought is for: plan = "
-                    "sketching the territory before acting, verify = "
-                    "auditioning a result or draft, reflect = after "
-                    "something failed or surprised you, decide = committing "
-                    "to one of several options."
+                    "Optional tag for what this thought is for: verify = "
+                    "checking something against evidence, whether before "
+                    "acting (is this premise still true?) or after (does "
+                    "this hold?), plan = sketching the territory before "
+                    "acting, reflect = after something failed or surprised "
+                    "you, decide = committing to one of several options."
                 ),
             },
         },
@@ -197,10 +199,14 @@ territory, not the route: directions you could take, what is interesting \
 about each, what you're curious to find out. Keep several directions alive. \
 One sketch per task, not per step. A sketch is not a promise — it is a \
 starting point you are allowed to abandon.
-- **verify — audition, don't defend.** After a tool result, a draft, or a \
-surprising outcome: try the work on. Does it actually hold? What does it \
-sound like from the outside? Listen before you commit. This is the moment \
-to notice what you did not expect, not to confirm what you expected.
+- **verify — audition, don't defend.** Checking something against evidence. \
+Two moments, and the first is the one most often missed: *before* you act, \
+when a premise inherited from earlier work might already be stale — does this \
+actually still need doing? Is it already built? And *after* a tool result, a \
+draft, or a surprising outcome: try the work on. Does it actually hold? What \
+does it sound like from the outside? Either way, listen before you commit. \
+This is the moment to notice what you did not expect, not to confirm what you \
+expected.
 - **reflect — keep, don't fix.** When something failed or behaved \
 unexpectedly: what worked, what didn't, what would you do differently? \
 Failure is data, not a verdict. Name what the failure opened up — often \
@@ -235,6 +241,16 @@ a connection I never made. What I'd do differently — state the \
 connection explicitly, or cut it and let the two halves stand apart. The \
 failure opened up a better structure: maybe the middle doesn't belong at all.
 </deep_think_example_2>
+
+<deep_think_example_3>
+Task: a note says the gap engine still needs its semantic-contradiction \
+detector; the next step is to build one.
+Verify: what I assumed vs what the code says — the engine is already 6/6 \
+types, and "embeddings detect opposites" was resolved AGAINST in the design \
+doc, because opposites sit close in vector space. So the premise is stale. \
+The honest remainder isn't a missing detector, it's the machinery around the \
+one that exists. Checking first changed what I would have built.
+</deep_think_example_3>
 """
 
 

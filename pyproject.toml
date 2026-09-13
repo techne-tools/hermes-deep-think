@@ -1,6 +1,6 @@
 [project]
 name = "hermes-deep-think"
-version = "1.0.0"
+version = "1.2.0"
 description = "A no-op deep_think tool for Hermes Agent: reasoning as a tool call, per the think-tool/tau-bench pattern, with an inspectable reasoning trace."
 readme = "README.md"
 requires-python = ">=3.11"
